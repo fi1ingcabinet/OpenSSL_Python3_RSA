@@ -2,50 +2,53 @@
 
 This is explained here: https://cryptobloggins.com/?p=236
 
-0. Versions:
+##0. Versions:
 
-0.1. Create plaintext:
+###0.1. Create plaintext:
+'
 echo "The quick brown fox jumped over the lazy dogs." > plaintext.txt
 cat plaintext.txt
 The quick brown fox jumped over the lazy dogs.
-
-0.2. OpenSSL
+'
+###0.2. OpenSSL
+'
 $ openssl version
 LibreSSL 2.6.5
-
-0.3. Python
+'
+###0.3. Python
+'
 $ python3 --version
 Python 3.7.6
 (venv) $ pip freeze
 pycrypto==2.6.1
+'
 
+##1. OpenSSL:
 
-1. OpenSSL:
-
-1.1. Gen priv key
-
+###1.1. Gen priv key
+'
 openssl genrsa -out openSSLPrivKey.pem 2048
-
-1.2. Gen pub key
+'
+###1.2. Gen pub key
 
 openssl rsa -in openSSLPrivKey.pem -pubout -out openSSLPubkey.pem
 
-1.3. Encrypt
+###1.3. Encrypt
 
 openssl rsautl -encrypt -inkey openSSLPubkey.pem -pubin -in plaintext.txt -out openSSLCiphertext.bin
 
-1.4. Decrypt
+###1.4. Decrypt
 
 openssl rsautl -decrypt -inkey openSSLPrivKey.pem -in openSSLCiphertext.bin -out plaintext.decr.txt
 
-1.5. Encode/Decode base64
+###1.5. Encode/Decode base64
 openssl base64 -in openSSLCiphertext.bin -out openSSLCiphertext.base64
 openssl base64 -d -in ciphertext.base64 -out ciphertext.base64.decode
 
 
-2. Python:
+##2. Python:
 
-2.1. Gen priv key
+###2.1. Gen priv key
 
 from Crypto.PublicKey import RSA
 key = RSA.generate(2048)
@@ -53,7 +56,7 @@ privKeyFile = open('pythonPrivKey.pem','wb')
 privKeyFile.write(key.exportKey('PEM'))
 privKeyFile.close()
 
-2.2. Gen pub key
+###2.2. Gen pub key
 
 from Crypto.PublicKey import RSA
 privKeyFile = open('pythonPrivKey.pem','rb')
@@ -63,7 +66,7 @@ pubKeyFile = open('pythonPubKey.pem','wb')
 pubKeyFile.write(publicKey.exportKey('PEM'))
 pubKeyFile.close()
 
-2.3. Encrypt
+###2.3. Encrypt
 
 from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
@@ -76,7 +79,7 @@ ciphertext_file = open('pythonCiphertext.bin','wb')
 ciphertext_file.write(ciphertext)
 ciphertext_file.close()
 
-2.4. Decrypt
+###2.4. Decrypt
 
 from Crypto.Hash import SHA
 from Crypto import Random
@@ -92,7 +95,7 @@ message = cipher.decrypt(ciphertext, sentinel)
 message
 b'The quick brown fox jumped over the lazy dogs.\n'
 
-2.5. Encode/Decode base64
+###2.5. Encode/Decode base64
 
 import base64
 ciphertext_file = open('pythonCiphertext.bin','rb')
